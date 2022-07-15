@@ -9,7 +9,12 @@ export const User = (props: Props) => {
       <a href={props.user.html_url}>
         <img src={props.user.avatar_url} alt="" />
       </a>
-      <p>{props.user.login}</p>
+      <h1>{props.user.login}</h1>
+      <ul>
+        <li>email: {props.user.email}</li>
+        <li>followers: {props.user.followers}</li>
+        <li>followring: {props.user.following}</li>
+      </ul>
     </div>
   );
 };
