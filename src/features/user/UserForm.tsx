@@ -1,17 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { getUser } from "./userSlice";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectUser } from "./userSlice";
+import { useAppDispatch } from "../../app/hooks";
 import { useSelector } from "react-redux";
 import { User } from "./User";
+import { Rings } from "react-loader-spinner";
 
 export const UserForm = () => {
   const userRef = useRef<HTMLInputElement>(null);
-  const { user } = useSelector((state: any) => state.user);
+  const { user, status } = useSelector((state: any) => state.user);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    console.log(user);
-  });
+
   return (
     <div>
       <input ref={userRef} type="text" />
@@ -19,8 +17,14 @@ export const UserForm = () => {
         onClick={async () => {
           await dispatch(getUser(userRef.current!.value));
         }}
-      >検索</button>
-      <User user={user}/>
+      >
+        検索
+      </button>
+      {status === "loading" ? (
+        <Rings height="100" width="100" color="grey" ariaLabel="loading" />
+      ) : (
+        <User user={user} />
+      )}
     </div>
   );
 };

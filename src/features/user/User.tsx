@@ -3,6 +3,7 @@ type Props = {
 };
 
 export const User = (props: Props) => {
+  if (props.user.login === undefined) return <p>Not found</p>;
   return (
     <div>
       <a href={props.user.html_url}>

@@ -2,24 +2,27 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchByName } from "./userAPI";
 
 export interface userState {
-  value?: { [index: string]: string };
+  user: { [index: string]: string };
   status: "idle" | "loading" | "failed";
+
 }
+const initialState: userState = {
+  user: {},
+  status: "idle"
+};
 
 export const getUser = createAsyncThunk(
   "user/fetchUser",
   async (userName?: string) => {
-    const res = await fetchByName(userName!);
+    const res = await fetchByName(userName!)
+    console.log(res)
     return res;
   }
 );
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: {
-    user: {},
-    status: "idle",
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -32,9 +35,10 @@ export const userSlice = createSlice({
       })
       .addCase(getUser.rejected, (state) => {
         state.status = "failed";
+       
       });
   },
 });
 
-export const selectUser = (state: userState) => state.value;
+export const selectUser = (state: userState) => state.user;
 export default userSlice.reducer;
