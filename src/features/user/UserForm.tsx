@@ -1,18 +1,26 @@
-import { useRef } from "react";
-import { useDispatch } from "react-redux";
-import { fetchByName } from "./userAPI";
+import { useEffect, useRef } from "react";
+import { getUser } from "./userSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { selectUser } from "./userSlice";
+import { useSelector } from "react-redux";
+import { User } from "./User";
 
 export const UserForm = () => {
-  const dispatch = useDispatch();
-  const userRef = useRef(null);
+  const userRef = useRef<HTMLInputElement>(null);
+  const { user } = useSelector((state: any) => state.user);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    console.log(user);
+  });
   return (
     <div>
-      <input ref="userRef" type="text" />
+      <input ref={userRef} type="text" />
       <button
         onClick={async () => {
-          dispatch(fetchByName("sa"));
+          await dispatch(getUser(userRef.current!.value));
         }}
-      ></button>
+      >検索</button>
+      <User user={user}/>
     </div>
   );
 };

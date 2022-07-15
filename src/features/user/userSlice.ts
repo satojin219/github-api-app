@@ -1,4 +1,3 @@
-import { selectCount } from './../counter/counterSlice';
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchByName } from "./userAPI";
 
@@ -7,41 +6,35 @@ export interface userState {
   status: "idle" | "loading" | "failed";
 }
 
-export const fetchUser = createAsyncThunk(
+export const getUser = createAsyncThunk(
   "user/fetchUser",
-  async (userName: string) => {
-    const res = await fetchByName(userName);
+  async (userName?: string) => {
+    const res = await fetchByName(userName!);
     return res;
   }
 );
 
-
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    value: {},
+    user: {},
     status: "idle",
   },
-  reducers: {
-    changeUser: (state, action) => {
-      state.value = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUser.pending, (state) => {
+      .addCase(getUser.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchUser.fulfilled, (state, action) => {
+      .addCase(getUser.fulfilled, (state, action) => {
         state.status = "idle";
-        state.value = action.payload;
+        state.user = action.payload;
       })
-      .addCase(fetchUser.rejected, (state) => {
+      .addCase(getUser.rejected, (state) => {
         state.status = "failed";
       });
   },
 });
 
 export const selectUser = (state: userState) => state.value;
-export const { changeUser } = userSlice.actions;
 export default userSlice.reducer;
